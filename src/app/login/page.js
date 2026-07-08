@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -27,6 +28,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="ornek@mail.com"
+            required
           />
           <Input
             label="Şifre"
@@ -35,9 +37,16 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
+            required
           />
           <Button type="submit">Giriş Yap</Button>
         </form>
+        <p className="mt-4 text-center text-sm text-muted">
+                    Hesabın yok mu? {' '}
+                    <Link href="/register" className="text-primary hover:underline">
+                        Kayıt Ol
+                    </Link>
+                </p>
       </div>
     </div>
   );
