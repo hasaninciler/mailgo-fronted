@@ -104,3 +104,13 @@ export async function getAnalytics(startDate, endDate) {
   if (!res.ok) throw new Error(result.message || 'Analitik veriler alınamadı');
   return result;
 }
+export async function updateSubscriber(id, data) {
+  const res = await fetch(`${API_URL}/subscribers/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Güncelleme başarısız');
+  return result;
+}

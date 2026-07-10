@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { getAnalytics } from '../../lib/api';
-import { Users, UserMinus, Mail, MousePointerClick } from 'lucide-react';
+import { Users, UserMinus, Mail, MousePointerClick, Calendar } from 'lucide-react';
 import SubscriberChart from '../../components/dashboard/SubscriberChart';
 import SubscriberDonut from '../../components/dashboard/SubscriberDonut';
 import RecentActivity from '../../components/dashboard/RecentActivity';
@@ -58,14 +58,35 @@ export default function DashboardPage() {
       iconBg: 'bg-accent-orange/10',
     },
   ];
+  const today = new Date().toLocaleDateString('tr-TR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 
   return (
     <DashboardLayout>
       <div className="p-8">
-        <h1 className="mb-2 text-3xl font-bold text-dark">Dashboard</h1>
-        <p className="mb-8 text-muted">
-          Aboneleriniz ve kampanyalarınız hakkında genel bilgiler
-        </p>
+
+
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+
+            <h1 className="text-3xl font-bold text-dark">Dashboard</h1>
+            <p className="mt-2 text-muted">
+              Hoş geldin, {user ? user.name : 'misafir'}!
+            </p>
+            
+            <p className="text-muted">
+              Aboneleriniz ve kampanyalarınız hakkında genel bilgiler
+            </p>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl px-4 py-3 ">
+            <Calendar size={18} className="text-muted" />
+            <span className="text-sm font-medium text-dark">{today}</span>
+          </div>
+        </div>
 
         {error && <p className="mb-4 text-sm text-accent-red">{error}</p>}
 

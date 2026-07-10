@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import DashboardLayout from '../../components/layout/DashboardLayout';
-import { getSubscribers, createSubscriber, importSubscribers, getCategories } from '../../lib/api';
+import { getSubscribers, createSubscriber, importSubscribers, getCategories, updateSubscriber } from '../../lib/api';
 
 export default function SubscribersPage() {
     const [subscribers, setSubscribers] = useState([]);
@@ -82,6 +82,19 @@ export default function SubscribersPage() {
         }
     };
 
+    const handleToggleSubscribe = async (subscriber) => {
+        try {
+            await updateSubscriber(subscriber.id, {
+                name: subscriber.name,
+                email: subscriber.email,
+                categoryId: subscriber.categoryId,
+                isSubscribed: !subscriber.isSubscribed,
+            });
+            loadSubscribers();
+        } catch (err) {
+            setError(err.message);
+        }
+    };
     return (
         <DashboardLayout>
             <div className="p-8">
@@ -155,10 +168,12 @@ export default function SubscribersPage() {
                                             {s.Category ? s.Category.name : 'Kategorisiz'}
                                         </p>
                                     </div>
-                                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${s.isSubscribed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                                        }`}>
-                                        {s.isSubscribed ? 'Abone' : 'Çıkmış'}
-                                    </span>
+                                    <button
+                                        onClick={() => handleToggleSubscribe(s)}
+                                        className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${s.isSubscribed ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'
+                                            }`}>
+                                        {s.isSubscribed ? 'Abone ✓' : 'Çıkmış'}
+                                    </button>
                                 </li>
                             ))}
                         </ul>
