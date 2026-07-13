@@ -16,9 +16,9 @@ const data = [
   { day: 'Çar', count: 5 },
   { day: 'Per', count: 9 },
   { day: 'Cum', count: 8 },
-  { day: 'Cmt', count: 12 },
+  { day: 'Cmt', count: 12 },   // YASIN ABI ŞUAN BU VERİLER CANLI DEGİL GÖSTERMELİK BUNU 
   { day: 'Paz', count: 10 },
-];
+]; 
 
 export default function SubscriberChart() {
   return (
