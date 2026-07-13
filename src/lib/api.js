@@ -1,18 +1,23 @@
 const API_URL = 'http://localhost:5001/api';
 
+function getAuthHeaders(isJson = true) {
+  const headers = {};
+  if (isJson) headers['Content-Type'] = 'application/json';
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 export async function registerUser(data) {
   const res = await fetch(`${API_URL}/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-
   const result = await res.json();
-
-  if (!res.ok) {
-    throw new Error(result.message || 'hata oluştu');
-  }
-
+  if (!res.ok) throw new Error(result.message || 'Bir hata oluştu');
   return result;
 }
 
@@ -22,17 +27,15 @@ export async function loginUser(data) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-
   const result = await res.json();
-
-  if (!res.ok) {
-    throw new Error(result.message || 'hata oluştu');
-  }
-
+  if (!res.ok) throw new Error(result.message || 'Bir hata oluştu');
   return result;
 }
+
 export async function getCategories() {
-  const res = await fetch(`${API_URL}/categories`);
+  const res = await fetch(`${API_URL}/categories`, {
+    headers: getAuthHeaders(),
+  });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Kategoriler alınamadı');
   return result;
@@ -41,7 +44,7 @@ export async function getCategories() {
 export async function createCategory(data) {
   const res = await fetch(`${API_URL}/categories`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     body: JSON.stringify(data),
   });
   const result = await res.json();
@@ -49,8 +52,20 @@ export async function createCategory(data) {
   return result;
 }
 
+export async function deleteCategory(id) {
+  const res = await fetch(`${API_URL}/categories/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Silme başarısız');
+  return result;
+}
+
 export async function getCampaigns() {
-  const res = await fetch(`${API_URL}/campaigns`);
+  const res = await fetch(`${API_URL}/campaigns`, {
+    headers: getAuthHeaders(),
+  });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Kampanyalar alınamadı');
   return result;
@@ -59,15 +74,18 @@ export async function getCampaigns() {
 export async function createCampaign(data) {
   const res = await fetch(`${API_URL}/campaigns`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     body: JSON.stringify(data),
   });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Kampanya oluşturulamadı');
   return result;
 }
+
 export async function getSubscribers() {
-  const res = await fetch(`${API_URL}/subscribers`);
+  const res = await fetch(`${API_URL}/subscribers`, {
+    headers: getAuthHeaders(),
+  });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Aboneler alınamadı');
   return result;
@@ -76,7 +94,7 @@ export async function getSubscribers() {
 export async function createSubscriber(data) {
   const res = await fetch(`${API_URL}/subscribers`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     body: JSON.stringify(data),
   });
   const result = await res.json();
@@ -84,9 +102,21 @@ export async function createSubscriber(data) {
   return result;
 }
 
+export async function updateSubscriber(id, data) {
+  const res = await fetch(`${API_URL}/subscribers/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Güncelleme başarısız');
+  return result;
+}
+
 export async function importSubscribers(formData) {
   const res = await fetch(`${API_URL}/subscribers/import`, {
     method: 'POST',
+    headers: getAuthHeaders(false), 
     body: formData,
   });
   const result = await res.json();
@@ -99,18 +129,10 @@ export async function getAnalytics(startDate, endDate) {
   if (startDate && endDate) {
     url += `?startDate=${startDate}&endDate=${endDate}`;
   }
-  const res = await fetch(url);
-  const result = await res.json();
-  if (!res.ok) throw new Error(result.message || 'Analitik veriler alınamadı');
-  return result;
-}
-export async function updateSubscriber(id, data) {
-  const res = await fetch(`${API_URL}/subscribers/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
+  const res = await fetch(url, {
+    headers: getAuthHeaders(),
   });
   const result = await res.json();
-  if (!res.ok) throw new Error(result.message || 'Güncelleme başarısız');
+  if (!res.ok) throw new Error(result.message || 'Analitik veriler alınamadı');
   return result;
 }

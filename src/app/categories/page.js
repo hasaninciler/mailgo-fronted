@@ -5,7 +5,7 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 
-import { getCategories, createCategory } from '../../lib/api';
+import { getCategories, createCategory, deleteCategory } from '../../lib/api';
 
 export default function CategoriesPage() {
     const [categories, setCategories] = useState([]);
@@ -40,6 +40,16 @@ export default function CategoriesPage() {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!confirm('Bu kategoriyi silmek istediğinize emin misiniz?')) return;
+        try {
+            await deleteCategory(id);
+            loadCategories();
+        } catch (err) {
+            setError(err.message);
         }
     };
 
@@ -81,9 +91,17 @@ export default function CategoriesPage() {
                     ) : (
                         <ul className="flex flex-col gap-3">
                             {categories.map((cat) => (
-                                <li key={cat.id} className="rounded-lg border border-gray-100 p-4">
-                                    <p className="font-medium text-dark">{cat.name}</p>
-                                    <p className="text-sm text-muted">{cat.description || 'Açıklama yok'}</p>
+                                <li key={cat.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-4">
+                                    <div>
+                                        <p className="font-medium text-dark">{cat.name}</p>
+                                        <p className="text-sm text-muted">{cat.description || 'Açıklama yok'}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => handleDelete(cat.id)}
+                                        className="rounded-lg px-3 py-1 text-sm font-medium text-accent-red transition-colors hover:bg-accent-red/10"
+                                    >
+                                        Sil
+                                    </button>
                                 </li>
                             ))}
                         </ul>
