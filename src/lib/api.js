@@ -82,6 +82,15 @@ export async function createCampaign(data) {
   return result;
 }
 
+export async function getCampaign(id) {
+  const res = await fetch(`${API_URL}/campaigns/${id}`, {
+    headers: getAuthHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Kampanya bulunamadı');
+  return result;
+}
+
 export async function getSubscribers() {
   const res = await fetch(`${API_URL}/subscribers`, {
     headers: getAuthHeaders(),

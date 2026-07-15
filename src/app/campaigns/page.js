@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import DashboardLayout from '../../components/layout/DashboardLayout';
-
+import Link from 'next/link';
 import { getCampaigns, createCampaign } from '../../lib/api';
 
 export default function CampaignsPage() {
@@ -97,7 +97,10 @@ export default function CampaignsPage() {
                                     <p className="text-sm text-muted">{c.description || 'Açıklama yok'}</p>
                                     <p className="mt-1 text-xs text-primary">{c.targetUrl}</p>
                                     <p className="text-xs text-muted">Tıklanma: {c.clickCount}</p>
-                                </li>
+                                    <Link href={`/campaigns/${c.id}`} className="mt-2 inline-block text-xs font-medium text-primary hover:underline">
+                                        Detayları gör →
+                                    </Link>
+                                </li> 
                             ))}
                         </ul>
                     )}
