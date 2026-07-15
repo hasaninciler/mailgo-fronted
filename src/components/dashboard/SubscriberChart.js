@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
   AreaChart,
   Area,
@@ -9,18 +10,17 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
-
-const data = [
-  { day: 'Pzt', count: 4 },
-  { day: 'Sal', count: 7 },
-  { day: 'Çar', count: 5 },
-  { day: 'Per', count: 9 },
-  { day: 'Cum', count: 8 },
-  { day: 'Cmt', count: 12 },   // YASIN ABI ŞUAN BU VERİLER CANLI DEGİL GÖSTERMELİK BUNU 
-  { day: 'Paz', count: 10 },
-]; 
+import { getWeeklySubscribers } from '../../lib/api';
 
 export default function SubscriberChart() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getWeeklySubscribers()
+      .then((res) => setData(res))
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="rounded-2xl bg-card p-6 shadow-lg">
       <h2 className="mb-6 text-lg font-semibold text-dark">
@@ -36,7 +36,7 @@ export default function SubscriberChart() {
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
           <XAxis dataKey="day" stroke="#8b8ba7" fontSize={12} tickLine={false} axisLine={false} />
-          <YAxis stroke="#8b8ba7" fontSize={12} tickLine={false} axisLine={false} />
+          <YAxis stroke="#8b8ba7" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
           <Tooltip />
           <Area
             type="monotone"

@@ -68,21 +68,14 @@ export default function DashboardPage() {
   return (
     <DashboardLayout>
       <div className="p-8">
-
-
         <div className="mb-8 flex items-center justify-between">
           <div>
-
             <h1 className="text-3xl font-bold text-dark">Dashboard</h1>
             <p className="mt-2 text-muted">
-              Hoş geldin, {user ? user.name : 'misafir'}!
-            </p>
-            
-            <p className="text-muted">
               Aboneleriniz ve kampanyalarınız hakkında genel bilgiler
             </p>
           </div>
-          <div className="flex items-center gap-2 rounded-xl px-4 py-3 ">
+          <div className="flex items-center gap-2 rounded-xl bg-card px-4 py-3 shadow-sm">
             <Calendar size={18} className="text-muted" />
             <span className="text-sm font-medium text-dark">{today}</span>
           </div>
@@ -90,22 +83,25 @@ export default function DashboardPage() {
 
         {error && <p className="mb-4 text-sm text-accent-red">{error}</p>}
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-col divide-y divide-gray-100 rounded-2xl bg-card p-2 shadow-lg sm:flex-row sm:divide-x sm:divide-y-0">
           {cards.map((card) => {
             const Icon = card.icon;
             return (
-              <div key={card.label} className="rounded-2xl bg-card p-6 shadow-lg">
-                <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg}`}>
+              <div key={card.label} className="flex flex-1 items-center gap-4 p-6">
+                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${card.iconBg}`}>
                   <Icon className={card.iconColor} size={24} />
                 </div>
-                <p className="text-sm text-muted">{card.label}</p>
-                <p className="mt-1 text-3xl font-bold text-dark">
-                  {stats ? card.value : '...'}
-                </p>
+                <div>
+                  <p className="text-sm text-muted">{card.label}</p>
+                  <p className="mt-1 text-2xl font-bold text-dark">
+                    {stats ? card.value : '...'}
+                  </p>
+                </div>
               </div>
             );
           })}
         </div>
+
         <div className="mt-6">
           <SubscriberChart />
         </div>

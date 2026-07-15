@@ -145,3 +145,12 @@ export async function getAnalytics(startDate, endDate) {
   if (!res.ok) throw new Error(result.message || 'Analitik veriler alınamadı');
   return result;
 }
+
+export async function getWeeklySubscribers() {
+  const res = await fetch(`${API_URL}/analytics/subscribers-weekly`, {
+    headers: getAuthHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Veriler alınamadı');
+  return result;
+}
