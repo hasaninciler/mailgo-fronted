@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import DashboardLayout from '../../components/layout/DashboardLayout';
-import Link from 'next/link';
-import { getCampaigns, createCampaign } from '../../lib/api';
+import { getCampaigns, createCampaign, deleteCampaign } from '../../lib/api';
 
 export default function CampaignsPage() {
     const [campaigns, setCampaigns] = useState([]);
@@ -42,6 +42,16 @@ export default function CampaignsPage() {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!confirm('Bu kampanyayı silmek istediğinize emin misiniz?')) return;
+        try {
+            await deleteCampaign(id);
+            loadCampaigns();
+        } catch (err) {
+            setError(err.message);
         }
     };
 
@@ -92,15 +102,23 @@ export default function CampaignsPage() {
                     ) : (
                         <ul className="flex flex-col gap-3">
                             {campaigns.map((c) => (
-                                <li key={c.id} className="rounded-lg border border-gray-100 p-4">
-                                    <p className="font-medium text-dark">{c.name}</p>
-                                    <p className="text-sm text-muted">{c.description || 'Açıklama yok'}</p>
-                                    <p className="mt-1 text-xs text-primary">{c.targetUrl}</p>
-                                    <p className="text-xs text-muted">Tıklanma: {c.clickCount}</p>
-                                    <Link href={`/campaigns/${c.id}`} className="mt-2 inline-block text-xs font-medium text-primary hover:underline">
-                                        Detayları gör →
-                                    </Link>
-                                </li> 
+                                <li key={c.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-4">
+                                    <div>
+                                        <p className="font-medium text-dark">{c.name}</p>
+                                        <p className="text-sm text-muted">{c.description || 'Açıklama yok'}</p>
+                                        <p className="mt-1 text-xs text-primary">{c.targetUrl}</p>
+                                        <p className="text-xs text-muted">Tıklanma: {c.clickCount}</p>
+                                        <Link href={`/campaigns/${c.id}`} className="mt-2 inline-block text-xs font-medium text-primary hover:underline">
+                                            Detayları gör →
+                                        </Link>
+                                    </div>
+                                    <button
+                                        onClick={() => handleDelete(c.id)}
+                                        className="rounded-lg px-3 py-1 text-sm font-medium text-accent-red transition-colors hover:bg-accent-red/10"
+                                    >
+                                        Sil
+                                    </button>
+                                </li>
                             ))}
                         </ul>
                     )}

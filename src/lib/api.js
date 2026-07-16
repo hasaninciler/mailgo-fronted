@@ -154,3 +154,23 @@ export async function getWeeklySubscribers() {
   if (!res.ok) throw new Error(result.message || 'Veriler alınamadı');
   return result;
 }
+
+export async function deleteCampaign(id) {
+  const res = await fetch(`${API_URL}/campaigns/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Silme başarısız');
+  return result;
+}
+
+export async function deleteSubscriber(id) {
+  const res = await fetch(`${API_URL}/subscribers/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Silme başarısız');
+  return result;
+}
